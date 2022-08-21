@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Read_configuration_file.Helper;
-using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Read_configuration_file.Services;
 
@@ -24,53 +19,60 @@ namespace Read_configuration_file.Controllers
         }
         [HttpGet]
         [Route("/Home")]
-        public IActionResult levelController(string input1, string error)
+        public IActionResult LevelController(string input, string logtype)
         {
            
             string message ;
             bool condition = false;
-        
-          
-            if (error.ToUpper() == "ERROR" && _options.Value.error)
+            try
             {
 
-               
-                    _logger.LogError($"Error has occured {input1}");
-                    message= "Error Printed";
-                condition = true;
+
+                if (logtype.ToUpper() == "ERROR" && _options.Value.error)
+                {
+
+
+                    _logger.LogError($"Error has occured {input}");
+                    message = "Error Printed";
+                    condition = true;
 
 
 
 
-            }
+                }
 
-            else if (error.ToUpper() == "WARNING" && _options.Value.warning)
-            {
-               
-                    _logger.LogWarning($"warning has occured  {input1}");
+                else if (logtype.ToUpper() == "WARNING" && _options.Value.warning)
+                {
+
+                    _logger.LogWarning($"warning has occured  {input}");
                     message = "Warning Printed";
-                condition = true;
-               
-                
+                    condition = true;
 
-            }
 
-            else if (error.ToUpper() == "DEBUG" && _options.Value.debug)
-            {
-                
-                    _logger.LogWarning($"warning has occured  {input1}");
+
+                }
+
+                else if (logtype.ToUpper() == "DEBUG" && _options.Value.debug)
+                {
+
+                    _logger.LogWarning($"warning has occured  {input}");
                     message = "Debug Printed";
-                condition = true;
-                
-            }
+                    condition = true;
 
-            else
+                }
+
+                else
+                {
+                    _logger.LogInformation($"NO issues {input}");
+                    message = "NOT Printed ";
+                }
+
+                return Ok(new { message = input, HasConsolePrinted = message, LogType = logtype, LogCondidtionEnabled = condition });
+            }
+            catch (Exception e)
             {
-                _logger.LogInformation($"NO issues {input1}");
-                message = "NOT Printed ";
+                return StatusCode(400, new { status = "Bad Request Invalid Input" ,message=e.Message });
             }
-
-            return Ok(new { message= input1, HasConsolePrinted=message,LogType= error,LogCondidtionEnabled=condition });
         }
     }
 }
