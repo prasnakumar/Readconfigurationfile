@@ -22,7 +22,7 @@ namespace Read_configuration_file
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:6999");
+                   webBuilder.UseUrls("https://*:6999");
                 });
     }
 }
