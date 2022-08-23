@@ -13,6 +13,7 @@ namespace Read_configuration_file
     {
         public static void Main(string[] args)
         {
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -21,6 +22,7 @@ namespace Read_configuration_file
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://*:6999");
                 });
     }
 }

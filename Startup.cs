@@ -36,16 +36,20 @@ namespace Read_configuration_file
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void ConfigureDevelopment(IApplicationBuilder app, IWebHostEnvironment env ,ILogger<Startup> logger)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Read_configuration_file v1"));
-            }
+            logger.LogInformation("this is the current env {env}", env.EnvironmentName);
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Read_configuration_file v1"));
+            Configure(app, env, logger);
+        }
 
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        {
+
+            logger.LogInformation("this is the current env from configure  {env}", env.EnvironmentName);
             app.UseHttpsRedirection();
 
             app.UseRouting();
